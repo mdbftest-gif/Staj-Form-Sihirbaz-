@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staj Belgesi Hazırlama Sihirbazı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border-radius: 12px;
+            border: none;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Sadece okunabilir (kilitli) alanlar için hafif gri arka plan */
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            color: #495057;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. GİRİŞ EKRANI -->
+    <div id="girisEkrani" class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white p-4" style="border-radius: 12px 12px 0 0;">
+                        <h4 class="mb-0 text-center">Öğrenci Giriş Sistemi</h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="mailAdimi">
+                            <div class="mb-4">
+                                <label class="form-label">Okul E-Posta Adresi</label>
+                                <input type="email" id="ogrenciMail" class="form-control form-control-lg"
+                                    placeholder="Örn: 2********@kocaelisaglik.edu.tr">
+                            </div>
+                            <button type="button" id="btnKodGonder" class="btn btn-primary w-100 py-2 fw-bold">Doğrulama
+                                Kodu Gönder</button>
+                        </div>
+
+                        <div id="kodAdimi" class="hidden">
+                            <div class="alert alert-success mb-4 text-center">Doğrulama kodu e-posta adresinize
+                                gönderildi!</div>
+                            <div class="mb-4">
+                                <label class="form-label">6 Haneli Doğrulama Kodu</label>
+                                <input type="text" id="dogrulamaKodu" class="form-control form-control-lg text-center"
+                                    placeholder="******" maxlength="6" style="letter-spacing: 5px; font-weight: bold;">
+                            </div>
+                            <button type="button" id="btnDogrula" class="btn btn-success w-100 py-2 fw-bold">Sisteme
+                                Giriş Yap</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 2. STAJ FORMU EKRANI (Başlangıçta Gizli) -->
+    <div id="stajFormuEkrani" class="container py-5 hidden">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white p-4 d-flex justify-content-between align-items-center"
+                        style="border-radius: 12px 12px 0 0;">
+                        <div>
+                            <h4 class="mb-0">Staj Belgesi Hazırlama Sihirbazı</h4>
+                            <p class="mb-0 text-white-50 mt-1">Lütfen belgede yer alacak bilgileri eksiksiz doldurun.
+                            </p>
+                        </div>
+                        <button type="button" id="btnCikis" class="btn btn-danger btn-sm fw-bold px-3">Çıkış
+                            Yap</button>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="stajFormu" class="needs-validation" novalidate>
+
+                            <h5 class="text-primary border-bottom pb-2 mb-4">Öğrenci Bilgileri</h5>
+                            <div class="row g-3 mb-5">
+                                
+                                <!-- PDF YÜKLEME VE E-DEVLET KISAYOLU -->
+                                <div class="col-12 mb-4 p-4 bg-white border border-primary rounded shadow-sm">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <label class="form-label fw-bold text-primary mb-0 fs-6">1. Adım: e-Devlet Belgesi Yükle (PDF)</label>
+                                        <a href="https://www.turkiye.gov.tr/kocaeli-saglik-ve-teknoloji-universitesi-sertifika-sorgulama" target="_blank" class="btn btn-sm btn-outline-primary fw-bold">
+                                            e-Devlet'e Git ↗
+                                        </a>
+                                    </div>
+                                    <div class="input-group">
+                                        <input type="file" class="form-control" id="pdfDosyasi" accept="application/pdf">
+                                        <button class="btn btn-primary fw-bold px-4" type="button" id="btnPdfYukle" style="min-width: 140px;">Bilgileri Çek</button>
+                                    </div>
+                                    <small class="text-muted d-block mt-2">
+                                        Lütfen e-Devlet üzerinden aldığınız <strong>Kocaeli Sağlık ve Teknoloji Üniversitesi Sertifika</strong> PDF belgesini buraya yükleyin. 
+                                        Sistemin güvenliği için <strong>Adınız, T.C. Kimlik Numaranız</strong> ve <strong>Sertifika Numaranız</strong> belgeden otomatik çekilecektir.
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Adı Soyadı</label>
+                                    <input type="text" class="form-control form-save" id="ogrenci_ad" name="ogrenci_ad"
+                                        placeholder="Belgeden çekilecek..." readonly required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">T.C. Kimlik No</label>
+                                    <input type="text" class="form-control form-save" id="ogrenci_tc" name="ogrenci_tc" maxlength="11"
+                                        placeholder="Belgeden çekilecek..." readonly required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Sertifika No</label>
+                                    <input type="text" class="form-control form-save" id="sertifika_no" name="sertifika_no"
+                                        placeholder="Belgeden çekilecek..." readonly required>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label">Öğrenci Numarası</label>
+                                    <input type="text" class="form-control form-save" id="ogrenci_no" name="ogrenci_no"
+                                        readonly required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Bölümü</label>
+                                    <input type="text" class="form-control form-save" id="ogrenci_bolum"
+                                        name="ogrenci_bolum" readonly required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Öğretim Yılı</label>
+                                    <input type="text" class="form-control form-save" id="ogrenci_yil" name="ogrenci_yil" readonly required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Doğum Yeri</label>
+                                    <input type="text" class="form-control form-save" name="ogrenci_dogum_yeri"
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Doğum Tarihi</label>
+                                    <input type="date" class="form-control form-save" name="ogrenci_dogum_tarihi"
+                                        required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Baba Adı</label>
+                                    <input type="text" class="form-control form-save" name="ogrenci_baba_adi" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">SGK No</label>
+                                    <input type="text" class="form-control form-save" name="ogrenci_sgk" 
+                                        minlength="13" maxlength="13" pattern="\d{13}" 
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <div class="invalid-feedback">
+                                        Lütfen 13 haneli SGK numaranızı sadece rakamlar kullanarak girin.
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Telefon No</label>
+                                    <input type="tel" class="form-control form-save" name="ogrenci_telefon" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">E-posta Adresi</label>
+                                    <input type="email" class="form-control form-save" id="ogrenci_eposta"
+                                        name="ogrenci_eposta" readonly required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">İkametgah Adresi</label>
+                                    <textarea class="form-control form-save" name="ogrenci_adres" rows="2"
+                                        required></textarea>
+                                </div>
+                            </div>
+
+                            <h5 class="text-primary border-bottom pb-2 mb-4">Staj Yapılan İş Yeri Bilgileri</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">Kurum Adı</label>
+                                    <input type="text" class="form-control form-save" name="kurum_adi"
+                                        placeholder="Örn: Toyota Motor Manufacturing Turkey (TMMT)" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Hizmet Alanı</label>
+                                    <input type="text" class="form-control form-save" name="kurum_hizmet"
+                                        placeholder="Örn: Nesnelerin İnterneti (IoT)" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Telefon No</label>
+                                    <input type="tel" class="form-control form-save" name="kurum_telefon" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Faks No</label>
+                                    <input type="tel" class="form-control form-save" name="kurum_faks">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">E-posta Adresi</label>
+                                    <input type="email" class="form-control form-save" name="kurum_eposta" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Web Adresi</label>
+                                    <input type="url" class="form-control form-save" name="kurum_web"
+                                        placeholder="https://...">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Kurum Adresi</label>
+                                    <textarea class="form-control form-save" name="kurum_adres" rows="2"
+                                        required></textarea>
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input form-save" type="checkbox" id="altiGunCalisma"
+                                            name="alti_gun_calisma" checked>
+                                        <label class="form-check-label fw-bold text-primary" for="altiGunCalisma">
+                                            Haftada 6 Gün Çalışılıyor (Cumartesi Günü Dahil)
+                                        </label>
+                                    </div>
+                                    <small class="text-muted">İşaretli değilse Cumartesi ve Pazar günleri tatil sayılır
+                                        (5 gün). Resmi tatiller otomatik düşülür.</small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Başlama Tarihi</label>
+                                    <input type="date" class="form-control form-save" id="baslamaTarihi"
+                                        name="kurum_baslama" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Bitiş Tarihi</label>
+                                    <input type="date" class="form-control form-save" id="bitisTarihi"
+                                        name="kurum_bitis" required>
+                                    <div class="invalid-feedback">
+                                        Bitiş tarihi, başlama tarihinden önce olamaz!
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Süresi (Gün)</label>
+                                    <input type="number" class="form-control bg-light form-save" id="stajSuresi"
+                                        name="kurum_sure" readonly>
+                                </div>
+                            </div>
+
+                            <div class="text-end mt-4">
+                                <button type="button" class="btn btn-primary px-5 py-2 fw-bold" id="btnOlustur">Word
+                                    Belgesi Olarak İndir</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const N8N_MAIL_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/mail-dogrulama';
+        const N8N_STAJ_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/staj-belgesi';
+        const N8N_PDF_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/pdf-oku';
+
+        function ogretimYiliniAyarla() {
+            const guncelYil = new Date().getFullYear();
+            const gecmisYil = guncelYil - 1;
+            const yaziFormati = gecmisYil + "-" + guncelYil;
+            document.getElementById('ogrenci_yil').value = yaziFormati;
+        }
+
+        // --- HAFIZA (STATE MANAGEMENT) FONKSİYONLARI ---
+        window.addEventListener('DOMContentLoaded', () => {
+            ogretimYiliniAyarla();
+
+            try {
+                if (localStorage.getItem('isLoggedIn') === 'true') {
+                    document.getElementById('girisEkrani').classList.add('hidden');
+                    document.getElementById('stajFormuEkrani').classList.remove('hidden');
+
+                    const formInputs = document.querySelectorAll('.form-save');
+                    formInputs.forEach(input => {
+                        if (input.name === 'ogrenci_yil') return; 
+
+                        const savedValue = localStorage.getItem(input.name || input.id);
+                        if (savedValue !== null) {
+                            if (input.type === 'checkbox') {
+                                input.checked = (savedValue === 'true');
+                            } else {
+                                input.value = savedValue;
+                            }
+                        }
+                    });
+                    gunHesapla(); 
+                }
+            } catch(e) {
+                console.warn("Yerel hafıza okuma hatası.");
+            }
+        });
+
+        document.querySelectorAll('.form-save').forEach(input => {
+            input.addEventListener('input', () => {
+                try {
+                    if (input.type === 'checkbox') {
+                        localStorage.setItem(input.name || input.id, input.checked);
+                    } else {
+                        localStorage.setItem(input.name || input.id, input.value);
+                    }
+                } catch(e) {}
+            });
+        });
+
+        document.getElementById('btnCikis').addEventListener('click', () => {
+            if (confirm("Tüm form verileri silinecek ve çıkış yapılacaktır. Onaylıyor musunuz?")) {
+                try { localStorage.clear(); } catch(e) {} 
+                location.reload(); 
+            }
+        });
+
+
+        // --- PDF DOSYASI İLE BİLGİ ÇEKME İŞLEMİ (ALERTSİZ VERSİYON) ---
+        document.getElementById('btnPdfYukle').addEventListener('click', async function() {
+            const fileInput = document.getElementById('pdfDosyasi');
+            const btn = document.getElementById('btnPdfYukle');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                // Sadece butonun rengini ve yazısını 2 saniyeliğine değiştir
+                const oldText = btn.innerText;
+                btn.innerText = "Dosya Seçilmedi!";
+                btn.classList.replace('btn-primary', 'btn-danger');
+                setTimeout(() => {
+                    btn.innerText = oldText;
+                    btn.classList.replace('btn-danger', 'btn-primary');
+                }, 2000);
+                return;
+            }
+
+            btn.innerText = "Okunuyor...";
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(N8N_PDF_WEBHOOK, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if(data.tc_kimlik && data.ad_soyad && data.sertifika_no) {
+                        document.getElementById('ogrenci_tc').value = data.tc_kimlik;
+                        document.getElementById('ogrenci_ad').value = data.ad_soyad;
+                        document.getElementById('sertifika_no').value = data.sertifika_no;
+                        
+                        try {
+                            localStorage.setItem('ogrenci_tc', data.tc_kimlik);
+                            localStorage.setItem('ogrenci_ad', data.ad_soyad);
+                            localStorage.setItem('sertifika_no', data.sertifika_no);
+                        } catch(storageErr) {}
+                        
+                        // Başarılı olduğunda sadece butonu güncelleyip form alanlarını doldurur
+                        btn.innerText = "Başarılı!";
+                        btn.classList.replace('btn-primary', 'btn-success');
+                        
+                        setTimeout(() => {
+                            btn.innerText = "Bilgileri Çek";
+                            btn.classList.replace('btn-success', 'btn-primary');
+                            btn.disabled = false;
+                        }, 2500);
+                        return; // Kod buradan çıkar, aşağıdaki catch veya hata durumlarına girmez
+                        
+                    } else {
+                        btn.innerText = "Okuma Hatası!";
+                        btn.classList.replace('btn-primary', 'btn-warning');
+                    }
+                } else {
+                    btn.innerText = "Sunucu Hatası!";
+                    btn.classList.replace('btn-primary', 'btn-danger');
+                }
+            } catch (error) {
+                console.error("Fetch Hatası:", error);
+                btn.innerText = "Bağlantı Hatası!";
+                btn.classList.replace('btn-primary', 'btn-danger');
+            } 
+            
+            // Eğer üstteki return noktasına ulaşılmadıysa (hata varsa) butonu 2 saniye sonra sıfırla
+            setTimeout(() => {
+                btn.innerText = "Bilgileri Çek";
+                btn.classList.remove('btn-danger', 'btn-warning', 'btn-success');
+                btn.classList.add('btn-primary');
+                btn.disabled = false;
+            }, 2500);
+        });
+
+
+        // --- GİRİŞ VE DOĞRULAMA İŞLEMLERİ ---
+        let uretilenKod = "";
+        let ogrenciBolumIsmi = "";
+        let ogrenciNumarasi = "";
+
+        document.getElementById('btnKodGonder').addEventListener('click', async function () {
+            const mailInput = document.getElementById('ogrenciMail').value.trim();
+
+            if (!mailInput.endsWith("@kocaelisaglik.edu.tr")) {
+                alert("Hata: Sadece @kocaelisaglik.edu.tr uzantılı okul mailiniz ile giriş yapabilirsiniz.");
+                return;
+            }
+
+            ogrenciNumarasi = mailInput.split("@")[0];
+
+            if (ogrenciNumarasi.length !== 9 || isNaN(ogrenciNumarasi)) {
+                alert("Hata: Geçersiz öğrenci numarası formatı.");
+                return;
+            }
+
+            const fakulteKodu = ogrenciNumarasi.substring(2, 4);
+            const bolumKodu = ogrenciNumarasi.substring(4, 6);
+
+            if (fakulteKodu !== "05") {
+                alert("Hata: Bu sistem sadece Mühendislik ve Doğa Bilimleri Fakültesi öğrencileri için geçerlidir.");
+                return;
+            }
+
+            if (bolumKodu === "01") {
+                ogrenciBolumIsmi = "Bilgisayar Mühendisliği";
+            } else if (bolumKodu === "02") {
+                ogrenciBolumIsmi = "Yazılım Mühendisliği";
+            } else {
+                alert("Hata: Bu sisteme sadece Bilgisayar Mühendisliği (01) ve Yazılım Mühendisliği (02) öğrencileri giriş yapabilir.");
+                return;
+            }
+
+            uretilenKod = Math.floor(100000 + Math.random() * 900000).toString();
+
+            const btn = document.getElementById('btnKodGonder');
+            btn.innerText = "Gönderiliyor...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(N8N_MAIL_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: mailInput, code: uretilenKod })
+                });
+
+                if (response.ok) {
+                    document.getElementById('mailAdimi').classList.add('hidden');
+                    document.getElementById('kodAdimi').classList.remove('hidden');
+                } else {
+                    alert("Mail gönderilirken sunucu hatası oluştu.");
+                }
+            } catch (error) {
+                alert("Sunucuya bağlanılamadı. n8n akışınızı kontrol edin.");
+            } finally {
+                btn.innerText = "Doğrulama Kodu Gönder";
+                btn.disabled = false;
+            }
+        });
+
+        document.getElementById('btnDogrula').addEventListener('click', function () {
+            const girilenKod = document.getElementById('dogrulamaKodu').value.trim();
+
+            if (girilenKod === uretilenKod && uretilenKod !== "") {
+                document.getElementById('girisEkrani').classList.add('hidden');
+                document.getElementById('stajFormuEkrani').classList.remove('hidden');
+
+                const mailAdresi = document.getElementById('ogrenciMail').value.trim();
+                document.getElementById('ogrenci_eposta').value = mailAdresi;
+                document.getElementById('ogrenci_no').value = ogrenciNumarasi;
+                document.getElementById('ogrenci_bolum').value = ogrenciBolumIsmi;
+
+                try {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('ogrenci_eposta', mailAdresi);
+                    localStorage.setItem('ogrenci_no', ogrenciNumarasi);
+                    localStorage.setItem('ogrenci_bolum', ogrenciBolumIsmi);
+                } catch(e) {}
+
+            } else {
+                alert("Hatalı doğrulama kodu girdiniz.");
+            }
+        });
+
+
+        // --- STAJ FORMU HESAPLAMA VE GÖNDERİM İŞLEMLERİ ---
+        const baslamaInput = document.getElementById('baslamaTarihi');
+        const bitisInput = document.getElementById('bitisTarihi');
+        const sureInput = document.getElementById('stajSuresi');
+        const altiGunInput = document.getElementById('altiGunCalisma');
+
+        const resmiTatiller = [
+            "01-01", "04-23", "05-01", "05-19", "07-15", "08-30", "10-29",
+            "2026-05-28", "2026-05-29", "2026-05-30", "2026-05-31"
+        ];
+
+        function isResmiTatil(dateObj) {
+            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const yyyy = dateObj.getFullYear();
+
+            const kisaTarih = `${mm}-${dd}`;
+            const tamTarih = `${yyyy}-${mm}-${dd}`;
+
+            return resmiTatiller.includes(kisaTarih) || resmiTatiller.includes(tamTarih);
+        }
+
+        baslamaInput.addEventListener('change', function() {
+            if (baslamaInput.value) {
+                bitisInput.min = baslamaInput.value;
+            } else {
+                bitisInput.removeAttribute('min');
+            }
+            gunHesapla();
+        });
+
+        function gunHesapla() {
+            if (baslamaInput.value && bitisInput.value) {
+                const baslama = new Date(baslamaInput.value);
+                const bitis = new Date(bitisInput.value);
+                const altiGunMu = altiGunInput.checked;
+
+                if (isNaN(baslama.getTime()) || isNaN(bitis.getTime())) {
+                    sureInput.value = "";
+                    return;
+                }
+
+                if (bitis < baslama) {
+                    bitisInput.classList.add('is-invalid');
+                    bitisInput.setCustomValidity("Bitiş tarihi başlangıçtan önce olamaz.");
+                    sureInput.value = "";  
+                    try {
+                        localStorage.removeItem('kurum_bitis');
+                        localStorage.setItem('kurum_sure', 0);
+                    } catch(e) {}
+                    return; 
+                } else {
+                    bitisInput.classList.remove('is-invalid');
+                    bitisInput.setCustomValidity("");
+                }
+
+                let isGunu = 0;
+                let currentDate = new Date(baslama);
+
+                while (currentDate <= bitis) {
+                    const dayOfWeek = currentDate.getDay();
+                    const tatilMi = isResmiTatil(currentDate);
+
+                    let haftaSonuTatili = (dayOfWeek === 0);
+
+                    const opsiyonelTatilGunu = 6;
+                    if (!altiGunMu && dayOfWeek === opsiyonelTatilGunu) {
+                        haftaSonuTatili = true;
+                    }
+
+                    if (!haftaSonuTatili && !tatilMi) {
+                        isGunu++;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+                
+                sureInput.value = isGunu;
+                try { localStorage.setItem('kurum_sure', isGunu); } catch(e) {}
+            } else {
+                sureInput.value = "";
+                bitisInput.classList.remove('is-invalid');
+                bitisInput.setCustomValidity("");
+            }
+        }
+
+        bitisInput.addEventListener('change', gunHesapla);
+        altiGunInput.addEventListener('change', gunHesapla);
+
+        document.getElementById('btnOlustur').addEventListener('click', async function (e) {
+            e.preventDefault();
+
+            const form = document.getElementById('stajFormu');
+            
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated'); 
+                form.reportValidity();
+                return;
+            }
+            
+            form.classList.remove('was-validated');
+
+            const btn = document.getElementById('btnOlustur');
+            btn.innerText = "Word Belgesi Hazırlanıyor...";
+            btn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                const veriler = Object.fromEntries(formData.entries());
+
+                if (veriler.ogrenci_dogum_tarihi) veriler.ogrenci_dogum_tarihi = veriler.ogrenci_dogum_tarihi.split('-').reverse().join('.');
+                if (veriler.kurum_baslama) veriler.kurum_baslama = veriler.kurum_baslama.split('-').reverse().join('.');
+                if (veriler.kurum_bitis) veriler.kurum_bitis = veriler.kurum_bitis.split('-').reverse().join('.');
+                veriler.kurum_sure = (veriler.kurum_sure || "0") + " Gün";
+
+                const response = await fetch(N8N_STAJ_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(veriler)
+                });
+
+                if (!response.ok) throw new Error("n8n sunucusundan hatalı yanıt döndü.");
+
+                const blob = await response.blob();
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                const temizIsim = veriler.ogrenci_ad.replace(/\s+/g, '_');
+                link.download = `Staj_Belgesi_${temizIsim}.docx`;
+                link.click();
+
+            } catch (error) {
+                console.error("Hata:", error);
+                alert("n8n sunucusu ile bağlantı kurulamadı. CORS ayarlarını veya n8n'in aktifliğini kontrol edin.");
+            } finally {
+                btn.innerText = "Word Belgesi Olarak İndir";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
