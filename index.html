@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staj Belgesi Hazırlama Sihirbazı</title>
+    <title>KOSTÜ - İşletmede Mesleki Eğitim (İME) Belgesi Hazırlama Sistemi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -43,7 +43,7 @@
             <div class="col-lg-6">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white p-4" style="border-radius: 12px 12px 0 0;">
-                        <h4 class="mb-0 text-center">Öğrenci Giriş Sistemi</h4>
+                        <h4 class="mb-0 text-center fw-bold">Öğrenci Giriş Sistemi</h4>
                     </div>
                     <div class="card-body p-4">
                         <div id="mailAdimi">
@@ -52,20 +52,17 @@
                                 <input type="email" id="ogrenciMail" class="form-control form-control-lg"
                                     placeholder="Örn: 2********@kocaelisaglik.edu.tr">
                             </div>
-                            <button type="button" id="btnKodGonder" class="btn btn-primary w-100 py-2 fw-bold">Doğrulama
-                                Kodu Gönder</button>
+                            <button type="button" id="btnKodGonder" class="btn btn-primary w-100 py-2 fw-bold">Doğrulama Kodu Gönder</button>
                         </div>
 
                         <div id="kodAdimi" class="hidden">
-                            <div class="alert alert-success mb-4 text-center">Doğrulama kodu e-posta adresinize
-                                gönderildi!</div>
+                            <div class="alert alert-success mb-4 text-center">Doğrulama kodu e-posta adresinize gönderildi!</div>
                             <div class="mb-4">
                                 <label class="form-label">6 Haneli Doğrulama Kodu</label>
                                 <input type="text" id="dogrulamaKodu" class="form-control form-control-lg text-center"
                                     placeholder="******" maxlength="6" style="letter-spacing: 5px; font-weight: bold;">
                             </div>
-                            <button type="button" id="btnDogrula" class="btn btn-success w-100 py-2 fw-bold">Sisteme
-                                Giriş Yap</button>
+                            <button type="button" id="btnDogrula" class="btn btn-success w-100 py-2 fw-bold">Sisteme Giriş Yap</button>
                         </div>
                     </div>
                 </div>
@@ -74,7 +71,7 @@
     </div>
 
 
-    <!-- 2. STAJ FORMU EKRANI (Başlangıçta Gizli) -->
+    <!-- 2. İME FORMU EKRANI (Başlangıçta Gizli) -->
     <div id="stajFormuEkrani" class="container py-5 hidden">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -82,12 +79,11 @@
                     <div class="card-header bg-primary text-white p-4 d-flex justify-content-between align-items-center"
                         style="border-radius: 12px 12px 0 0;">
                         <div>
-                            <h4 class="mb-0">Staj Belgesi Hazırlama Sihirbazı</h4>
-                            <p class="mb-0 text-white-50 mt-1">Lütfen belgede yer alacak bilgileri eksiksiz doldurun.
-                            </p>
+                            <p class="mb-1 text-white-50 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 0.05em;">Kocaeli Sağlık ve Teknoloji Üniversitesi</p>
+                            <h4 class="mb-0 fw-bold">İşletmede Mesleki Eğitim (İME) Belgesi Hazırlama Sistemi</h4>
+                            <p class="mb-0 text-white-50 mt-1 small">Lütfen resmi protokol ve evraklarda yer alacak bilgileri eksiksiz doldurun.</p>
                         </div>
-                        <button type="button" id="btnCikis" class="btn btn-danger btn-sm fw-bold px-3">Çıkış
-                            Yap</button>
+                        <button type="button" id="btnCikis" class="btn btn-danger btn-sm fw-bold px-3">Çıkış Yap</button>
                     </div>
                     <div class="card-body p-4">
                         <form id="stajFormu" class="needs-validation" novalidate>
@@ -145,8 +141,9 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Doğum Yeri</label>
-                                    <input type="text" class="form-control form-save" name="ogrenci_dogum_yeri"
-                                        required>
+                                    <input type="text" class="form-control form-save" name="ogrenci_dogum_yeri" minlength="2" maxlength="50"
+                                        placeholder="Örn: Kocaeli" required>
+                                    <div class="invalid-feedback">Lütfen geçerli bir doğum yeri giriniz.</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Doğum Tarihi</label>
@@ -155,12 +152,15 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Baba Adı</label>
-                                    <input type="text" class="form-control form-save" name="ogrenci_baba_adi" required>
+                                    <input type="text" class="form-control form-save" name="ogrenci_baba_adi" minlength="2" maxlength="40"
+                                        placeholder="Örn: Mehmet" required>
+                                    <div class="invalid-feedback">Lütfen geçerli bir baba adı giriniz.</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">SGK No</label>
                                     <input type="text" class="form-control form-save" name="ogrenci_sgk" 
                                         minlength="13" maxlength="13" pattern="\d{13}" 
+                                        placeholder="13 haneli SGK numarası"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                     <div class="invalid-feedback">
                                         Lütfen 13 haneli SGK numaranızı sadece rakamlar kullanarak girin.
@@ -168,7 +168,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Telefon No</label>
-                                    <input type="tel" class="form-control form-save" name="ogrenci_telefon" required>
+                                    <input type="tel" class="form-control form-save" id="ogrenci_telefon" name="ogrenci_telefon" 
+                                        placeholder="05XXXXXXXXX" minlength="10" maxlength="11" pattern="^(0?5\d{9})$" required 
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <div class="invalid-feedback">
+                                        Lütfen geçerli bir cep telefonu numarası giriniz (Örn: 05XXXXXXXXX).
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">E-posta Adresi</label>
@@ -177,44 +182,54 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">İkametgah Adresi</label>
-                                    <textarea class="form-control form-save" name="ogrenci_adres" rows="2"
-                                        required></textarea>
+                                    <textarea class="form-control form-save" name="ogrenci_adres" rows="2" minlength="15" maxlength="250"
+                                        placeholder="Mahalle, Cadde/Sokak, Bina No, İlçe/İl açık adresinizi yazınız" required></textarea>
+                                    <div class="invalid-feedback">Lütfen en az 15 karakterden oluşan açık ikametgah adresinizi giriniz.</div>
                                 </div>
                             </div>
 
-                            <h5 class="text-primary border-bottom pb-2 mb-4">Staj Yapılan İş Yeri Bilgileri</h5>
+                            <h5 class="text-primary border-bottom pb-2 mb-4">İME Yapılan Kurum / İş Yeri Bilgileri</h5>
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <label class="form-label">Kurum Adı</label>
-                                    <input type="text" class="form-control form-save" name="kurum_adi"
-                                        placeholder="Örn: Toyota Motor Manufacturing Turkey (TMMT)" required>
+                                    <input type="text" class="form-control form-save" name="kurum_adi" minlength="3" maxlength="120"
+                                        placeholder="Örn: HAVELSAN A.Ş." required>
+                                    <div class="invalid-feedback">Lütfen geçerli bir kurum adı giriniz (en az 3 karakter).</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Hizmet Alanı</label>
-                                    <input type="text" class="form-control form-save" name="kurum_hizmet"
-                                        placeholder="Örn: Nesnelerin İnterneti (IoT)" required>
+                                    <label class="form-label">Hizmet Alanı / Departman</label>
+                                    <input type="text" class="form-control form-save" name="kurum_hizmet" minlength="3" maxlength="100"
+                                        placeholder="Örn: Savunma Sanayii / Yazılım Geliştirme" required>
+                                    <div class="invalid-feedback">Lütfen departman veya faaliyet alanını giriniz (en az 3 karakter).</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Telefon No</label>
-                                    <input type="tel" class="form-control form-save" name="kurum_telefon" required>
+                                    <label class="form-label">Kurum Telefon No</label>
+                                    <input type="tel" class="form-control form-save" name="kurum_telefon" minlength="10" maxlength="11" pattern="^(0?[2-5]\d{9})$"
+                                        placeholder="Örn: 0262XXXXXXX" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <div class="invalid-feedback">Lütfen alan kodlu geçerli bir sabit veya kurumsal hat giriniz (Örn: 0262XXXXXXX).</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">Faks No</label>
-                                    <input type="tel" class="form-control form-save" name="kurum_faks">
+                                    <label class="form-label">Kurum Faks No</label>
+                                    <input type="tel" class="form-control form-save" name="kurum_faks" minlength="10" maxlength="11" pattern="^(0?[2-5]\d{9})?$"
+                                        placeholder="Varsa giriniz (Örn: 0262XXXXXXX)" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <div class="invalid-feedback">Geçerli bir faks numarası giriniz veya boş bırakınız.</div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label">E-posta Adresi</label>
-                                    <input type="email" class="form-control form-save" name="kurum_eposta" required>
+                                    <label class="form-label">Kurum E-posta Adresi</label>
+                                    <input type="email" class="form-control form-save" id="kurum_eposta" name="kurum_eposta" 
+                                        placeholder="ik@kurum.com" required>
+                                    <div class="invalid-feedback" id="kurumEpostaHata">Lütfen kuruma ait resmi bir kurumsal iletişim e-postası giriniz.</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Web Adresi</label>
-                                    <input type="url" class="form-control form-save" name="kurum_web"
-                                        placeholder="https://...">
+                                    <input type="text" class="form-control form-save" name="kurum_web"
+                                        placeholder="https://www.kurum.com">
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Kurum Adresi</label>
-                                    <textarea class="form-control form-save" name="kurum_adres" rows="2"
-                                        required></textarea>
+                                    <textarea class="form-control form-save" name="kurum_adres" rows="2" minlength="15" maxlength="250"
+                                        placeholder="Kurumun açık ve detaylı adresini yazınız" required></textarea>
+                                    <div class="invalid-feedback">Lütfen kurumun açık adresini giriniz (en az 15 karakter).</div>
                                 </div>
 
                                 <div class="col-12 mb-3">
@@ -225,33 +240,32 @@
                                             Haftada 6 Gün Çalışılıyor (Cumartesi Günü Dahil)
                                         </label>
                                     </div>
-                                    <small class="text-muted">İşaretli değilse Cumartesi ve Pazar günleri tatil sayılır
-                                        (5 gün). Resmi tatiller otomatik düşülür.</small>
+                                    <small class="text-muted">İşaretli değilse Cumartesi ve Pazar günleri tatil sayılır (5 gün). Resmi tatiller otomatik düşülür.</small>
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label">Başlama Tarihi</label>
+                                    <label class="form-label">İME Başlama Tarihi</label>
                                     <input type="date" class="form-control form-save" id="baslamaTarihi"
                                         name="kurum_baslama" required>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Bitiş Tarihi</label>
+                                    <label class="form-label">İME Bitiş Tarihi</label>
                                     <input type="date" class="form-control form-save" id="bitisTarihi"
                                         name="kurum_bitis" required>
-                                    <div class="invalid-feedback">
-                                        Bitiş tarihi, başlama tarihinden önce olamaz!
+                                    <div class="invalid-feedback" id="bitisHataMesaji">
+                                        Bitiş tarihi başlangıç tarihinden önce olamaz!
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Süresi (Gün)</label>
+                                    <label class="form-label">Süresi (İş Günü)</label>
                                     <input type="number" class="form-control bg-light form-save" id="stajSuresi"
                                         name="kurum_sure" readonly>
+                                    <small class="text-muted">Yarım dönem için: Min 70 - Max 95 iş günü</small>
                                 </div>
                             </div>
 
                             <div class="text-end mt-4">
-                                <button type="button" class="btn btn-primary px-5 py-2 fw-bold" id="btnOlustur">Word
-                                    Belgesi Olarak İndir</button>
+                                <button type="button" class="btn btn-primary px-5 py-2 fw-bold" id="btnOlustur">İME Belgesi Oluştur ve İndir</button>
                             </div>
                         </form>
                     </div>
@@ -262,17 +276,15 @@
 
     <script>
         const N8N_MAIL_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/mail-dogrulama';
-        const N8N_STAJ_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/staj-belgesi';
+        const N8N_IME_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/ime-belgesi';
         const N8N_PDF_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/pdf-oku';
 
         function ogretimYiliniAyarla() {
             const guncelYil = new Date().getFullYear();
             const gecmisYil = guncelYil - 1;
-            const yaziFormati = gecmisYil + "-" + guncelYil;
-            document.getElementById('ogrenci_yil').value = yaziFormati;
+            document.getElementById('ogrenci_yil').value = gecmisYil + "-" + guncelYil;
         }
 
-        // --- HAFIZA (STATE MANAGEMENT) FONKSİYONLARI ---
         window.addEventListener('DOMContentLoaded', () => {
             ogretimYiliniAyarla();
 
@@ -283,7 +295,7 @@
 
                     const formInputs = document.querySelectorAll('.form-save');
                     formInputs.forEach(input => {
-                        if (input.name === 'ogrenci_yil') return; 
+                        if (['ogrenci_yil', 'ogrenci_eposta', 'ogrenci_no', 'ogrenci_bolum'].includes(input.name || input.id)) return; 
 
                         const savedValue = localStorage.getItem(input.name || input.id);
                         if (savedValue !== null) {
@@ -320,15 +332,13 @@
             }
         });
 
-
-        // --- PDF DOSYASI İLE BİLGİ ÇEKME İŞLEMİ (ALERTSİZ VERSİYON) ---
+        // PDF İLE BİLGİ ÇEKME
         document.getElementById('btnPdfYukle').addEventListener('click', async function() {
             const fileInput = document.getElementById('pdfDosyasi');
             const btn = document.getElementById('btnPdfYukle');
             const file = fileInput.files[0];
 
             if (!file) {
-                // Sadece butonun rengini ve yazısını 2 saniyeliğine değiştir
                 const oldText = btn.innerText;
                 btn.innerText = "Dosya Seçilmedi!";
                 btn.classList.replace('btn-primary', 'btn-danger');
@@ -365,7 +375,6 @@
                             localStorage.setItem('sertifika_no', data.sertifika_no);
                         } catch(storageErr) {}
                         
-                        // Başarılı olduğunda sadece butonu güncelleyip form alanlarını doldurur
                         btn.innerText = "Başarılı!";
                         btn.classList.replace('btn-primary', 'btn-success');
                         
@@ -374,8 +383,7 @@
                             btn.classList.replace('btn-success', 'btn-primary');
                             btn.disabled = false;
                         }, 2500);
-                        return; // Kod buradan çıkar, aşağıdaki catch veya hata durumlarına girmez
-                        
+                        return;
                     } else {
                         btn.innerText = "Okuma Hatası!";
                         btn.classList.replace('btn-primary', 'btn-warning');
@@ -390,7 +398,6 @@
                 btn.classList.replace('btn-primary', 'btn-danger');
             } 
             
-            // Eğer üstteki return noktasına ulaşılmadıysa (hata varsa) butonu 2 saniye sonra sıfırla
             setTimeout(() => {
                 btn.innerText = "Bilgileri Çek";
                 btn.classList.remove('btn-danger', 'btn-warning', 'btn-success');
@@ -399,8 +406,7 @@
             }, 2500);
         });
 
-
-        // --- GİRİŞ VE DOĞRULAMA İŞLEMLERİ ---
+        // GİRİŞ VE DOĞRULAMA
         let uretilenKod = "";
         let ogrenciBolumIsmi = "";
         let ogrenciNumarasi = "";
@@ -488,26 +494,25 @@
             }
         });
 
-
-        // --- STAJ FORMU HESAPLAMA VE GÖNDERİM İŞLEMLERİ ---
+        // İME İŞ GÜNÜ HESAPLAMA (MİN 70, MAK 95 GÜN)
         const baslamaInput = document.getElementById('baslamaTarihi');
         const bitisInput = document.getElementById('bitisTarihi');
         const sureInput = document.getElementById('stajSuresi');
         const altiGunInput = document.getElementById('altiGunCalisma');
+        const bitisHata = document.getElementById('bitisHataMesaji');
 
         const resmiTatiller = [
             "01-01", "04-23", "05-01", "05-19", "07-15", "08-30", "10-29",
-            "2026-05-28", "2026-05-29", "2026-05-30", "2026-05-31"
+            "2026-03-20", "2026-03-21", "2026-03-22",
+            "2026-05-27", "2026-05-28", "2026-05-29", "2026-05-30"
         ];
 
         function isResmiTatil(dateObj) {
             const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
             const dd = String(dateObj.getDate()).padStart(2, '0');
             const yyyy = dateObj.getFullYear();
-
             const kisaTarih = `${mm}-${dd}`;
             const tamTarih = `${yyyy}-${mm}-${dd}`;
-
             return resmiTatiller.includes(kisaTarih) || resmiTatiller.includes(tamTarih);
         }
 
@@ -533,16 +538,13 @@
 
                 if (bitis < baslama) {
                     bitisInput.classList.add('is-invalid');
-                    bitisInput.setCustomValidity("Bitiş tarihi başlangıçtan önce olamaz.");
+                    bitisHata.textContent = "Bitiş tarihi başlangıç tarihinden önce olamaz!";
                     sureInput.value = "";  
                     try {
                         localStorage.removeItem('kurum_bitis');
                         localStorage.setItem('kurum_sure', 0);
                     } catch(e) {}
                     return; 
-                } else {
-                    bitisInput.classList.remove('is-invalid');
-                    bitisInput.setCustomValidity("");
                 }
 
                 let isGunu = 0;
@@ -551,11 +553,9 @@
                 while (currentDate <= bitis) {
                     const dayOfWeek = currentDate.getDay();
                     const tatilMi = isResmiTatil(currentDate);
-
                     let haftaSonuTatili = (dayOfWeek === 0);
 
-                    const opsiyonelTatilGunu = 6;
-                    if (!altiGunMu && dayOfWeek === opsiyonelTatilGunu) {
+                    if (!altiGunMu && dayOfWeek === 6) {
                         haftaSonuTatili = true;
                     }
 
@@ -564,25 +564,68 @@
                     }
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
-                
-                sureInput.value = isGunu;
-                try { localStorage.setItem('kurum_sure', isGunu); } catch(e) {}
+
+                // İME SÜRE KONTROLÜ (70 - 95 GÜN)
+                if (isGunu < 70) {
+                    bitisInput.classList.add('is-invalid');
+                    bitisHata.textContent = `Hesaplanan süre ${isGunu} gündür. İME tam zamanlı bir dönem olduğu için en az 70 iş günü olmalıdır!`;
+                    sureInput.value = isGunu;
+                    try { localStorage.setItem('kurum_sure', isGunu); } catch(e) {}
+                    return;
+                } else if (isGunu > 95) {
+                    bitisInput.classList.add('is-invalid');
+                    bitisHata.textContent = `Hesaplanan süre ${isGunu} gündür. Bir yarıyıl süresi en fazla 95 iş günü olabilir!`;
+                    sureInput.value = isGunu;
+                    try { localStorage.setItem('kurum_sure', isGunu); } catch(e) {}
+                    return;
+                } else {
+                    bitisInput.classList.remove('is-invalid');
+                    bitisHata.textContent = "";
+                    sureInput.value = isGunu;
+                    try { localStorage.setItem('kurum_sure', isGunu); } catch(e) {}
+                }
             } else {
                 sureInput.value = "";
                 bitisInput.classList.remove('is-invalid');
-                bitisInput.setCustomValidity("");
             }
         }
 
         bitisInput.addEventListener('change', gunHesapla);
         altiGunInput.addEventListener('change', gunHesapla);
 
+        // KURUM E-POSTA DOĞRULAMA (Okul maili girilemez)
+        const kurumEpostaInput = document.getElementById('kurum_eposta');
+        function kurumEpostaDogrula() {
+            const val = kurumEpostaInput.value.trim().toLowerCase();
+            const hataEl = document.getElementById('kurumEpostaHata');
+            if (val.endsWith('@kocaelisaglik.edu.tr')) {
+                kurumEpostaInput.classList.add('is-invalid');
+                hataEl.textContent = "Kurum e-postası olarak öğrenci okul e-postası yazılamaz. Kuruma ait resmi bir mail adresi giriniz.";
+                return false;
+            } else {
+                kurumEpostaInput.classList.remove('is-invalid');
+                return true;
+            }
+        }
+        kurumEpostaInput.addEventListener('input', kurumEpostaDogrula);
+
+        // FORM GÖNDERİM VE DOCX İNDİRME
         document.getElementById('btnOlustur').addEventListener('click', async function (e) {
             e.preventDefault();
 
+            gunHesapla();
+            const epostaGecerli = kurumEpostaDogrula();
             const form = document.getElementById('stajFormu');
             
-            if (!form.checkValidity()) {
+            const isGunuDeger = parseInt(sureInput.value || "0");
+            if (isGunuDeger < 70 || isGunuDeger > 95) {
+                bitisInput.classList.add('is-invalid');
+                bitisInput.focus();
+                alert(`Hata: İME süresi 70 ile 95 iş günü (yaklaşık bir yarıyıl) arasında olmalıdır. Şu anki süre: ${isGunuDeger} iş günü.`);
+                return;
+            }
+
+            if (!form.checkValidity() || !epostaGecerli) {
                 form.classList.add('was-validated'); 
                 form.reportValidity();
                 return;
@@ -591,7 +634,7 @@
             form.classList.remove('was-validated');
 
             const btn = document.getElementById('btnOlustur');
-            btn.innerText = "Word Belgesi Hazırlanıyor...";
+            btn.innerText = "İME Belgesi Hazırlanıyor...";
             btn.disabled = true;
 
             try {
@@ -603,7 +646,7 @@
                 if (veriler.kurum_bitis) veriler.kurum_bitis = veriler.kurum_bitis.split('-').reverse().join('.');
                 veriler.kurum_sure = (veriler.kurum_sure || "0") + " Gün";
 
-                const response = await fetch(N8N_STAJ_WEBHOOK, {
+                const response = await fetch(N8N_IME_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(veriler)
@@ -615,14 +658,16 @@
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
                 const temizIsim = veriler.ogrenci_ad.replace(/\s+/g, '_');
-                link.download = `Staj_Belgesi_${temizIsim}.docx`;
+                link.download = `IME_Belgesi_${temizIsim}.docx`;
+                document.body.appendChild(link);
                 link.click();
+                link.remove();
 
             } catch (error) {
                 console.error("Hata:", error);
-                alert("n8n sunucusu ile bağlantı kurulamadı. CORS ayarlarını veya n8n'in aktifliğini kontrol edin.");
+                alert("n8n sunucusu ile bağlantı kurulamadı. CORS ayarlarını veya ngrok tünelinin aktifliğini kontrol edin.");
             } finally {
-                btn.innerText = "Word Belgesi Olarak İndir";
+                btn.innerText = "İME Belgesi Oluştur ve İndir";
                 btn.disabled = false;
             }
         });
