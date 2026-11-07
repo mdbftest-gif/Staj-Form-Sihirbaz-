@@ -26,7 +26,6 @@
             display: none !important;
         }
 
-        /* Sadece okunabilir (kilitli) alanlar için hafif gri arka plan */
         input[readonly] {
             background-color: #e9ecef;
             cursor: not-allowed;
@@ -70,8 +69,7 @@
         </div>
     </div>
 
-
-    <!-- 2. İME FORMU EKRANI (Başlangıçta Gizli) -->
+    <!-- 2. İME FORMU EKRANI -->
     <div id="stajFormuEkrani" class="container py-5 hidden">
         <div class="row justify-content-center">
             <div class="col-lg-10">
@@ -91,7 +89,6 @@
                             <h5 class="text-primary border-bottom pb-2 mb-4">Öğrenci Bilgileri</h5>
                             <div class="row g-3 mb-5">
                                 
-                                <!-- PDF YÜKLEME VE E-DEVLET KISAYOLU -->
                                 <div class="col-12 mb-4 p-4 bg-white border border-primary rounded shadow-sm">
                                     <div class="d-flex justify-content-between align-items-center mb-3">
                                         <label class="form-label fw-bold text-primary mb-0 fs-6">1. Adım: e-Devlet Belgesi Yükle (PDF)</label>
@@ -147,8 +144,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Doğum Tarihi</label>
-                                    <input type="date" class="form-control form-save" name="ogrenci_dogum_tarihi"
-                                        required>
+                                    <input type="date" class="form-control form-save" name="ogrenci_dogum_tarihi" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Baba Adı</label>
@@ -206,7 +202,7 @@
                                     <label class="form-label">Kurum Telefon No</label>
                                     <input type="tel" class="form-control form-save" name="kurum_telefon" minlength="10" maxlength="11" pattern="^(0?[2-5]\d{9})$"
                                         placeholder="Örn: 0262XXXXXXX" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                    <div class="invalid-feedback">Lütfen alan kodlu geçerli bir sabit veya kurumsal hat giriniz (Örn: 0262XXXXXXX).</div>
+                                    <div class="invalid-feedback">Lütfen alan kodlu geçerli bir sabit hat giriniz (Örn: 0262XXXXXXX).</div>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Kurum Faks No</label>
@@ -275,9 +271,10 @@
     </div>
 
     <script>
-        const N8N_MAIL_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/mail-dogrulama';
-        const N8N_IME_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/ime-belgesi';
-        const N8N_PDF_WEBHOOK = 'https://scurvy-chosen-circus.ngrok-free.dev/webhook/pdf-oku';
+        // Yerel göreceli webhook yolları (CORS ve ngrok gerektirmez)
+        const N8N_MAIL_WEBHOOK = '/webhook/mail-dogrulama';
+        const N8N_IME_WEBHOOK  = '/webhook/ime-belgesi';
+        const N8N_PDF_WEBHOOK   = '/webhook/pdf-oku';
 
         function ogretimYiliniAyarla() {
             const guncelYil = new Date().getFullYear();
@@ -565,7 +562,6 @@
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
 
-                // İME SÜRE KONTROLÜ (70 - 95 GÜN)
                 if (isGunu < 70) {
                     bitisInput.classList.add('is-invalid');
                     bitisHata.textContent = `Hesaplanan süre ${isGunu} gündür. İME tam zamanlı bir dönem olduğu için en az 70 iş günü olmalıdır!`;
@@ -593,7 +589,6 @@
         bitisInput.addEventListener('change', gunHesapla);
         altiGunInput.addEventListener('change', gunHesapla);
 
-        // KURUM E-POSTA DOĞRULAMA (Okul maili girilemez)
         const kurumEpostaInput = document.getElementById('kurum_eposta');
         function kurumEpostaDogrula() {
             const val = kurumEpostaInput.value.trim().toLowerCase();
@@ -609,7 +604,6 @@
         }
         kurumEpostaInput.addEventListener('input', kurumEpostaDogrula);
 
-        // FORM GÖNDERİM VE DOCX İNDİRME
         document.getElementById('btnOlustur').addEventListener('click', async function (e) {
             e.preventDefault();
 
@@ -665,7 +659,7 @@
 
             } catch (error) {
                 console.error("Hata:", error);
-                alert("n8n sunucusu ile bağlantı kurulamadı. CORS ayarlarını veya ngrok tünelinin aktifliğini kontrol edin.");
+                alert("n8n sunucusu ile bağlantı kurulamadı. Lütfen n8n akışının açık olduğunu kontrol edin.");
             } finally {
                 btn.innerText = "İME Belgesi Oluştur ve İndir";
                 btn.disabled = false;
